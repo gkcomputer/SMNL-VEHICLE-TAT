@@ -1,0 +1,42 @@
+.sectioncheckinout-container{
+    width:100%;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.section-form-header{
+width: 100%;
+height: 100px;
+padding: 10px;
+display: flex;
+align-items: center;
+}
+
+.section-form-logo{
+width: 50%;
+
+}
+
+.section-form-logo img{
+width: 100%;
+}
+
+.section-form-userdetails{
+width: 50%;
+display: flex;
+flex-direction: column;
+align-items: flex-end;
+}
+
+.section-form-checkinout{
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    gap: 20px;
+}
+
+.section-form-buttons{
+    display: contents;
+}
