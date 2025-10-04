@@ -17,14 +17,11 @@ const SectionCheckInOut = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    console.log({ name, value });
-
     setVehicleData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log({ vehicleData });
   };
 
   return (

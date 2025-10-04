@@ -1,0 +1,52 @@
+.JobsTableOptions{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 15px;
+    justify-content: space-between;
+}
+
+.JobsTableButtons{
+    display: flex;
+    align-items: center;
+    gap: 10px
+
+}
+
+.firstRow{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 20px;
+    gap: 20px;
+}
+
+.secondRow{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 20px;
+    gap: 20px;
+}
+
+.thirdRow{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 20px;
+    gap: 20px;
+}
+
+.buttons-container{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
+.openJobCard-container {
+    height: 100vh;       /* full height */
+    overflow-y: auto;    /* enable vertical scroll */
+}
+
