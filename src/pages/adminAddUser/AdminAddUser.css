@@ -1,0 +1,28 @@
+.adduser-model-container{
+    padding: 20px;
+}
+
+
+.adduser-Model-header{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+.adduser-Model-buttons{
+    display: flex;
+    /* flex-direction: row; */
+    align-items: center;
+    justify-content: space-around;
+}
+
+.adduser-Model-row1{
+    display: flex;
+    justify-content: space-between;
+}
+
+.adduser-Model-row2{
+    display: flex;
+    justify-content: space-between;
+}
