@@ -8,18 +8,22 @@ import { useState } from "react";
 import { InputLabel, MenuItem, Select, TextField } from "@mui/material";
 import CustomMuiTextField from "../../customComponents/muiTextField/CustomMuiTextField";
 import CustomMuiPaper from "../../customComponents/muiPaper/CustomMuiPaper";
+import { addUser } from "../../features/users/UsersSlice";
 
 import "./AdminAddUser.css";
+import { useDispatch } from "react-redux";
 
 const AdminAddUser = () => {
+  const dispatch = useDispatch();
   const [user, SetUser] = useState({
     empid: "",
     empname: "",
     section: "",
-    status: "",
     password: "",
-    role: "",
+    userrole: "",
   });
+
+  const [modelOpen, setModelOPen] = useState(false);
 
   const columns = [
     { field: "id", headerName: "ID", width: 150 },
@@ -68,8 +72,19 @@ const AdminAddUser = () => {
       password: "123456",
     },
   ];
+  console.log({ user });
 
-  const handleChange = () => {};
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    SetUser((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log("clicked");
+    
+    dispatch(addUser(user));
+  };
 
   return (
     <div>
@@ -78,89 +93,124 @@ const AdminAddUser = () => {
           display: "flex",
           alignItems: "center",
           justifyContent: "flex-end",
+          margin: "20px",
         }}
       >
-        <CustomMuiButton variant="contained">Add New User</CustomMuiButton>
+        <CustomMuiButton
+          variant="contained"
+          onClick={() => {
+            setModelOPen(true);
+          }}
+        >
+          Add New User
+        </CustomMuiButton>
       </div>
       <CustomMuiTable columns={columns} rows={rows} />
 
-      <CustomMuiModel open={true}>
-        <CustomMuiPaper
-          sx={{
-            padding: "15px",
-            gap: "10px",
-            width: "800px",
-            display: "flex",
-            flexDirection: "column",
+      <form onSubmit={handleSubmit}>
+        {/* Add User Model*/}
+
+        <CustomMuiModel
+          open={modelOpen}
+          onClose={() => {
+            setModelOPen(!modelOpen);
           }}
         >
-          <div className="adduser-Model-header">
-            <CustomMuiTypoGraphy variant="h6">Add User</CustomMuiTypoGraphy>
-          </div>
-          <div className="adduser-Model-row1">
-            <CustomMuiTextField
-              variant="outlined"
-              label="Emp ID"
-              name="empid"
-              value={user.empid}
-              onChange={(e) => {
-                handleChange(e);
-              }}
-              fullWidth={true}
-            />
-            <CustomMuiTextField
-              variant="outlined"
-              label="Emp Name"
-              name="empname"
-              value={user.empname}
-              onChange={(e) => {
-                handleChange(e);
-              }}
-              fullWidth={true}
-            />
-          </div>
-          <div className="adduser-Model-row2">
-            <CustomMuiTextField
-              variant="outlined"
-              label="section"
-              name="section"
-              value={user.section}
-              onChange={(e) => {
-                handleChange(e);
-              }}
-            />
+          <CustomMuiPaper
+            sx={{
+              padding: "15px",
+              gap: "10px",
+              width: "800px",
+              display: "flex",
+              flexDirection: "column",
+            }}
+          >
+            <div className="adduser-Model-header">
+              <CustomMuiTypoGraphy variant="h6">Add User</CustomMuiTypoGraphy>
+            </div>
+            <div className="adduser-Model-row1">
+              <CustomMuiTextField
+                variant="outlined"
+                label="Emp ID"
+                name="empid"
+                value={user.empid}
+                onChange={(e) => {
+                  handleChange(e);
+                }}
+                fullWidth={true}
+              />
+              <CustomMuiTextField
+                variant="outlined"
+                label="Emp Name"
+                name="empname"
+                value={user.empname}
+                onChange={(e) => {
+                  handleChange(e);
+                }}
+                fullWidth={true}
+              />
+            </div>
+            <div className="adduser-Model-row2">
+              <CustomMuiTextField
+                variant="outlined"
+                label="section"
+                name="section"
+                value={user.section}
+                onChange={(e) => {
+                  handleChange(e);
+                }}
+                fullWidth={true}
+              />
 
-            <CustomMuiTextField
-              variant="outlined"
-              label="password"
-              name="password"
-              value={user.password}
-              onChange={(e) => {
-                handleChange(e);
-              }}
-            />
-          </div>
-          <div>
-            <InputLabel id="demo-simple-select-label">User Role</InputLabel>
-            <Select
-              labelId="demo-simple-select-label"
-              id="demo-simple-select"
-              label="User Role"
-              fullWidth
-              name="userrole"
-              value={user.userrole}
-              onChange={(e) => handleChange(e)}
-            >
-              <MenuItem value={"Admin"}>Admin</MenuItem>
-              <MenuItem value={"User"}>User</MenuItem>
-            </Select>
-          </div>
-          <div className="adduser-Model-buttons">
-            <CustomMuiButton variant="contained">Submit</CustomMuiButton>
-            <CustomMuiButton variant="contained">Cancel</CustomMuiButton>
-          </div>
-        </CustomMuiPaper>
-      </CustomMuiModel>
+              <CustomMuiTextField
+                variant="outlined"
+                label="password"
+                name="password"
+                value={user.password}
+                onChange={(e) => {
+                  handleChange(e);
+                }}
+                fullWidth={true}
+              />
+            </div>
+            <div>
+              <InputLabel id="demo-simple-select-label">User Role</InputLabel>
+              <Select
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                label="User Role"
+                fullWidth
+                name="userrole"
+                value={user.userrole}
+                onChange={(e) => handleChange(e)}
+              >
+                <MenuItem value={"Admin"}>Admin</MenuItem>
+                <MenuItem value={"User"}>User</MenuItem>
+              </Select>
+            </div>
+            <div className="adduser-Model-buttons">
+              <CustomMuiButton type="submit" variant="contained">
+                Submitt
+              </CustomMuiButton>
+              <CustomMuiButton
+                variant="contained"
+                onClick={() => {
+                  setModelOPen(!modelOpen);
+                  SetUser({
+                    empid: "",
+                    empname: "",
+                    section: "",
+                    password: "",
+                    userrole: "",
+                  });
+                }}
+              >
+                Cancel
+              </CustomMuiButton>
+            </div>
+          </CustomMuiPaper>
+        </CustomMuiModel>
+      </form>
     </div>
   );
 };

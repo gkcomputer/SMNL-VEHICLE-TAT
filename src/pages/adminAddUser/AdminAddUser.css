@@ -20,9 +20,11 @@
 .adduser-Model-row1{
     display: flex;
     justify-content: space-between;
+    gap:10px;
 }
 
 .adduser-Model-row2{
     display: flex;
     justify-content: space-between;
+    gap:10px;
 }
