@@ -4,16 +4,17 @@ import Paper from "@mui/material/Paper";
 
 const paginationModel = { page: 0, pageSize: 10 };
 
-export default function CustomMuiTable({ rows, columns }) {
+const CustomMuiTable = ({ rows, columns }) => {
+  console.log("abdul render");
   return (
-    <Paper sx={{ height: 400, width: "100%" }}>
-      <DataGrid
-        rows={rows}
-        columns={columns}
-        initialState={{ pagination: { paginationModel } }}
-        pageSizeOptions={[5, 10]}
-        sx={{ border: 0 }}
-      />
-    </Paper>
+    <DataGrid
+      rows={rows}
+      columns={columns}
+      initialState={{ pagination: { paginationModel } }}
+      pageSizeOptions={[5, 10]}
+      sx={{ border: 0 }}
+    />
   );
-}
+};
+
+export default React.memo(CustomMuiTable);

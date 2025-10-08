@@ -6,7 +6,7 @@ import CheckCircleIcon from "@mui/icons-material/CheckCircle"; // another icon
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import CustomMuiPaper from "../../customComponents/muiPaper/CustomMuiPaper";
 import CustomMuiModel from "../../customComponents/muiModel/CustomMuiModel";
-import CustomMuiTextField from '../../customComponents/muiTextField/CustomMuiTextField'
+import CustomMuiTextField from "../../customComponents/muiTextField/CustomMuiTextField";
 import CustomMuiDateRangePicker from "../../customComponents/muiDatePicker/CustomMuiDateRangePicker";
 
 export default function EntriesTable() {
@@ -282,9 +282,12 @@ export default function EntriesTable() {
   return (
     <Paper sx={{ height: 600, width: "100%" }}>
       <div>
-
-      <CustomMuiTextField placeholder="Search by door no" size="small" sx={{margin:"10px"}}/>
-      <CustomMuiDateRangePicker/>
+        <CustomMuiTextField
+          placeholder="Search by door no"
+          size="small"
+          sx={{ margin: "10px" }}
+        />
+        <CustomMuiDateRangePicker />
       </div>
       <DataGrid
         rows={rows}
@@ -295,10 +298,13 @@ export default function EntriesTable() {
         disableRowSelectionOnClick
       />
       <div>
-        <CustomMuiModel open={openModel} onClose={()=>setOpenModel(!openModel)}>
+        <CustomMuiModel
+          open={openModel}
+          onClose={() => setOpenModel(!openModel)}
+        >
           <CustomMuiPaper>
             <div>
-              <div  
+              <div
                 style={{
                   display: "flex",
                   justifyContent: "space-between",
