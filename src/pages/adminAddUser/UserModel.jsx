@@ -6,7 +6,7 @@ import CustomMuiButton from "../../customComponents/muiButton/CustomMuiButton";
 import { useState } from "react";
 import CustomMuiTextField from "../../customComponents/muiTextField/CustomMuiTextField";
 
-const UserModel = ({ modelOpen, user, handleChange, onClose }) => {
+const UserModel = ({ modelOpen, user, handleChange, onClose, onSubmit }) => {
   return (
     <CustomMuiModel open={modelOpen} onClose={onClose}>
       <CustomMuiPaper
@@ -27,9 +27,7 @@ const UserModel = ({ modelOpen, user, handleChange, onClose }) => {
             label="Emp ID"
             name="empid"
             value={user.empid}
-            onChange={(e) => {
-              handleChange(e);
-            }}
+            onChange={(e) => handleChange(e)}
             fullWidth={true}
           />
           <CustomMuiTextField
@@ -37,9 +35,7 @@ const UserModel = ({ modelOpen, user, handleChange, onClose }) => {
             label="Emp Name"
             name="empname"
             value={user.empname}
-            onChange={(e) => {
-              handleChange(e);
-            }}
+            onChange={(e) => handleChange(e)}
             fullWidth={true}
           />
         </div>
@@ -49,9 +45,7 @@ const UserModel = ({ modelOpen, user, handleChange, onClose }) => {
             label="section"
             name="section"
             value={user.section}
-            onChange={(e) => {
-              handleChange(e);
-            }}
+            onChange={(e) => handleChange(e)}
             fullWidth={true}
           />
 
@@ -60,9 +54,7 @@ const UserModel = ({ modelOpen, user, handleChange, onClose }) => {
             label="password"
             name="password"
             value={user.password}
-            onChange={(e) => {
-              handleChange(e);
-            }}
+            onChange={(e) => handleChange(e)}
             fullWidth={true}
           />
         </div>
@@ -82,10 +74,10 @@ const UserModel = ({ modelOpen, user, handleChange, onClose }) => {
           </Select>
         </div>
         <div className="adduser-Model-buttons">
-          <CustomMuiButton type="submit" variant="contained">
-            Submitt
+          <CustomMuiButton type="submit" variant="contained" onClick={onSubmit}>
+            Submit
           </CustomMuiButton>
-          <CustomMuiButton variant="contained" onClick={onClose()}>
+          <CustomMuiButton variant="contained" onClick={onClose}>
             Cancel
           </CustomMuiButton>
         </div>
