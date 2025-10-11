@@ -3,10 +3,16 @@ import CustomMuiModel from "../../customComponents/muiModel/CustomMuiModel";
 import CustomMuiPaper from "../../customComponents/muiPaper/CustomMuiPaper";
 import CustomMuiTypoGraphy from "../../customComponents/muiTypography/CustomMuiTypoGraphy";
 import CustomMuiButton from "../../customComponents/muiButton/CustomMuiButton";
-import { useState } from "react";
 import CustomMuiTextField from "../../customComponents/muiTextField/CustomMuiTextField";
 
-const UserModel = ({ modelOpen, user, handleChange, onClose, onSubmit }) => {
+const UserModel = ({
+  modelOpen,
+  user,
+  handleChange,
+  error,
+  onClose,
+  onSubmit,
+}) => {
   return (
     <CustomMuiModel open={modelOpen} onClose={onClose}>
       <CustomMuiPaper
@@ -29,6 +35,8 @@ const UserModel = ({ modelOpen, user, handleChange, onClose, onSubmit }) => {
             value={user.empid}
             onChange={(e) => handleChange(e)}
             fullWidth={true}
+            required={true}
+            error={error.empid}
           />
           <CustomMuiTextField
             variant="outlined"
@@ -37,6 +45,8 @@ const UserModel = ({ modelOpen, user, handleChange, onClose, onSubmit }) => {
             value={user.empname}
             onChange={(e) => handleChange(e)}
             fullWidth={true}
+            required={true}
+            error={error.empname}
           />
         </div>
         <div className="adduser-Model-row2">
@@ -47,6 +57,8 @@ const UserModel = ({ modelOpen, user, handleChange, onClose, onSubmit }) => {
             value={user.section}
             onChange={(e) => handleChange(e)}
             fullWidth={true}
+            required={true}
+            error={error.section}
           />
 
           <CustomMuiTextField
@@ -56,6 +68,8 @@ const UserModel = ({ modelOpen, user, handleChange, onClose, onSubmit }) => {
             value={user.password}
             onChange={(e) => handleChange(e)}
             fullWidth={true}
+            required={true}
+            error={error.password}
           />
         </div>
         <div>
@@ -67,6 +81,8 @@ const UserModel = ({ modelOpen, user, handleChange, onClose, onSubmit }) => {
             fullWidth
             name="userrole"
             value={user.userrole}
+            required
+            error={error.userrole}
             onChange={(e) => handleChange(e)}
           >
             <MenuItem value={"Admin"}>Admin</MenuItem>

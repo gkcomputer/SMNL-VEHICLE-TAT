@@ -4,7 +4,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import CustomMuiButton from "../../customComponents/muiButton/CustomMuiButton";
 import CustomMuiModel from "../../customComponents/muiModel/CustomMuiModel";
 import CustomMuiTypoGraphy from "../../customComponents/muiTypography/CustomMuiTypoGraphy";
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { InputLabel, MenuItem, Select, TextField } from "@mui/material";
 import CustomMuiTextField from "../../customComponents/muiTextField/CustomMuiTextField";
 import CustomMuiPaper from "../../customComponents/muiPaper/CustomMuiPaper";
@@ -13,14 +13,15 @@ import { addUser } from "../../features/users/UsersSlice";
 import "./AdminAddUser.css";
 import { useDispatch } from "react-redux";
 import UserModel from "./userModel";
+import CustomFormValidation from "../../customComponents/customFormValidataion/CustomFormValidaton";
 
-const rows = [
+const rowsData = [
   {
     id: 1,
     empid: "123",
     empname: "GK",
     section: "IT",
-    status: "Active",
+    userrole: "Admin",
     password: "123456",
   },
   {
@@ -28,7 +29,7 @@ const rows = [
     empid: "456",
     empname: "sravanth",
     section: "Electrical",
-    status: "Active",
+    userrole: "User",
     password: "123456",
   },
   {
@@ -36,7 +37,7 @@ const rows = [
     empid: "789",
     empname: "Rajesh",
     section: "volvo",
-    status: "Active",
+    userrole: "User",
     password: "123456",
   },
 ];
@@ -44,6 +45,7 @@ const rows = [
 const AdminAddUser = () => {
   const dispatch = useDispatch();
 
+  const [rows, setRows] = useState(rowsData);
   const [user, setUser] = useState({
     empid: "",
     empname: "",
@@ -51,24 +53,20 @@ const AdminAddUser = () => {
     password: "",
     userrole: "",
   });
-
-  const [selectedRow, setSelectedRow] = useState({
-    empid: "",
-    empname: "",
-    section: "",
-    password: "",
-    userrole: "",
+  const [modelOpen, setModelOPen] = useState(false);
+  const [modelType, setModelType] = useState({
+    add: false,
+    edit: false,
+    delete: false,
   });
 
-  const [modelOpen, setModelOPen] = useState(false);
+  const [deleteModel, setDeleteModel] = useState(false);
 
   // console.log({ user });
 
   const handleChange = (e) => {
-    performance.now();
     const { name, value } = e.target;
     setUser((prev) => ({ ...prev, [name]: value }));
-    performance.now();
   };
 
   const handleClose = () => {
@@ -79,12 +77,32 @@ const AdminAddUser = () => {
       password: "",
       userrole: "",
     });
-    setModelOPen(!modelOpen);
+    setModelOPen(false);
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch(addUser(user));
+    CustomFormValidation(user);
+    console.log("user edit", user);
+    if (modelType.add) {
+      setRows((prevRows) => [
+        ...prevRows,
+        { ...user, id: prevRows.length + 1 },
+      ]);
+      setModelType({ add: false });
+    }
+    if (modelType.edit) {
+      setRows((prev) => prev.map((u) => (u.id === user.id ? user : u)));
+      setModelType({ edit: false });
+    }
+    setUser({
+      empid: "",
+      empname: "",
+      section: "",
+      password: "",
+      userrole: "",
+    });
+    setModelOPen(false);
   };
 
   const columns = useMemo(
@@ -93,7 +111,7 @@ const AdminAddUser = () => {
       { field: "empid", headerName: "EMP ID", width: 150 },
       { field: "empname", headerName: "EMP Name", width: 150 },
       { field: "section", headerName: "Section", width: 150 },
-      { field: "status", headerName: "Status", width: 150 },
+      { field: "userrole", headerName: "Role", width: 150 },
       { field: "password", headerName: "Password", width: 150 },
       {
         field: "edit",
@@ -103,8 +121,9 @@ const AdminAddUser = () => {
           return (
             <BorderColorIcon
               onClick={() => {
-                setSelectedRow(params.row);
-                setModelOPen(!modelOpen);
+                setUser(params.row);
+                setModelType({ edit: true });
+                setModelOPen(true);
               }}
             />
           );
@@ -115,7 +134,14 @@ const AdminAddUser = () => {
         headerName: "Delete",
         width: 70,
         renderCell: (params) => {
-          return <DeleteIcon />;
+          return (
+            <DeleteIcon
+              onClick={() => {
+                setUser(params.row);
+                setDeleteModel(true);
+              }}
+            />
+          );
         },
       },
     ],
@@ -137,6 +163,7 @@ const AdminAddUser = () => {
           variant="contained"
           onClick={() => {
             setModelOPen(true);
+            setModelType({ add: true });
           }}
         >
           Add New User
@@ -146,14 +173,39 @@ const AdminAddUser = () => {
       {/*login users table*/}
       <CustomMuiTable columns={columns} rows={rows} />
 
-      {/* User Model to add and Edit user details */}
+      {/* User Model to add user details */}
       <UserModel
         modelOpen={modelOpen}
-        user={selectedRow || user}
+        user={user}
         handleChange={handleChange}
         onClose={handleClose}
         onSubmit={handleSubmit}
       />
+
+      {/* Delete user model*/}
+      <CustomMuiModel open={deleteModel}>
+        <CustomMuiPaper>
+          <p>Are you sure to delete user?</p>
+          <p>{user.empid}</p>
+          <p>{user.empname}</p>
+          <CustomMuiButton
+            variant="contained"
+            onClick={() => {
+              console.log("delete Confirmed");
+            }}
+          >
+            Confirm
+          </CustomMuiButton>
+          <CustomMuiButton
+            variant="contained"
+            onClick={() => {
+              setDeleteModel(false);
+            }}
+          >
+            Cancel
+          </CustomMuiButton>
+        </CustomMuiPaper>
+      </CustomMuiModel>
     </div>
   );
 };

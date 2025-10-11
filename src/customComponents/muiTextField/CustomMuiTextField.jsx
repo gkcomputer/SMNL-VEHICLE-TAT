@@ -9,7 +9,9 @@ export default function CustomMuiTextField({
   size,
   label,
   value,
+  error,
   maxRows,
+  required,
   onChange,
   multiline,
   fullWidth,
@@ -24,8 +26,10 @@ export default function CustomMuiTextField({
       size={size}
       label={label}
       value={value}
+      error={error}
       variant={variant}
       maxRows={maxRows}
+      required={required}
       onChange={onChange}
       multiline={multiline}
       fullWidth={fullWidth}
