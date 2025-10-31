@@ -4,48 +4,59 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import CustomMuiButton from "../../customComponents/muiButton/CustomMuiButton";
 import CustomMuiModel from "../../customComponents/muiModel/CustomMuiModel";
 import CustomMuiTypoGraphy from "../../customComponents/muiTypography/CustomMuiTypoGraphy";
-import { useCallback, useEffect, useMemo, useState } from "react";
-import { InputLabel, MenuItem, Select, TextField } from "@mui/material";
+import { useEffect, useMemo, useState } from "react";
+import { InputLabel, MenuItem, Select, Switch, TextField } from "@mui/material";
 import CustomMuiTextField from "../../customComponents/muiTextField/CustomMuiTextField";
 import CustomMuiPaper from "../../customComponents/muiPaper/CustomMuiPaper";
-import { addUser } from "../../features/users/UsersSlice";
-
-import "./AdminAddUser.css";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import UserModel from "./userModel";
 import CustomFormValidation from "../../customComponents/customFormValidataion/CustomFormValidaton";
+import FormValidation from "../../utils/FormValidation";
 
-const rowsData = [
-  {
-    id: 1,
-    empid: "123",
-    empname: "GK",
-    section: "IT",
-    userrole: "Admin",
-    password: "123456",
-  },
-  {
-    id: 2,
-    empid: "456",
-    empname: "sravanth",
-    section: "Electrical",
-    userrole: "User",
-    password: "123456",
-  },
-  {
-    id: 3,
-    empid: "789",
-    empname: "Rajesh",
-    section: "volvo",
-    userrole: "User",
-    password: "123456",
-  },
-];
+import "./AdminAddUser.css";
+import { addUser, fetchUsers } from "../../features/users/UsersSlice";
+import CustomMuiLoader from "../../customComponents/muiLoader/CustomMuiLoader";
+
+// const rowsData = [
+//   {
+//     id: 1,
+//     empid: "123",
+//     empname: "GK",
+//     section: "IT",
+//     userrole: "Admin",
+//     password: "123456",
+//   },
+//   {
+//     id: 2,
+//     empid: "456",
+//     empname: "sravanth",
+//     section: "Electrical",
+//     userrole: "User",
+//     password: "123456",
+//   },
+//   {
+//     id: 3,
+//     empid: "789",
+//     empname: "Rajesh",
+//     section: "volvo",
+//     userrole: "User",
+//     password: "123456",
+//   },
+// ];
 
 const AdminAddUser = () => {
   const dispatch = useDispatch();
 
-  const [rows, setRows] = useState(rowsData);
+  useEffect(() => {
+    dispatch(fetchUsers());
+  }, []);
+
+  const { usersList: rows } = useSelector((state) => state.user);
+  const { status, error } = useSelector((state) => state.user);
+
+  console.log({ status, error, rows });
+
+  // const [rows, setRows] = useState(rowsData);
   const [user, setUser] = useState({
     empid: "",
     empname: "",
@@ -54,16 +65,36 @@ const AdminAddUser = () => {
     userrole: "",
   });
   const [modelOpen, setModelOPen] = useState(false);
-  const [modelType, setModelType] = useState({
-    add: false,
-    edit: false,
-    delete: false,
-  });
+  const [modelType, setModelType] = useState(null);
 
   const [deleteModel, setDeleteModel] = useState(false);
 
-  // console.log({ user });
+  const [formErrors, setFormErrors] = useState({
+    empid: false,
+    empname: false,
+    section: false,
+    password: false,
+    userrole: false,
+  });
+  const [errorMsg, setErrorMsg] = useState(null);
 
+  // Handle Loading Spinner
+  const isLoading = { status: false, error: "" };
+  switch (status) {
+    case "loading":
+      isLoading.status = true;
+      break;
+    case "succeeded":
+      isLoading.status = false;
+      break;
+    case "failed":
+      isLoading.error = error;
+      break;
+    default:
+      isLoading.status = false;
+  }
+
+  // console.log({ user });
   const handleChange = (e) => {
     const { name, value } = e.target;
     setUser((prev) => ({ ...prev, [name]: value }));
@@ -77,24 +108,50 @@ const AdminAddUser = () => {
       password: "",
       userrole: "",
     });
+    setFormErrors({
+      empid: false,
+      empname: false,
+      section: false,
+      password: false,
+      userrole: false,
+    });
+    setErrorMsg(null);
     setModelOPen(false);
   };
 
+  // Handle Submit
   const handleSubmit = (e) => {
     e.preventDefault();
-    CustomFormValidation(user);
-    console.log("user edit", user);
+
+    // user form FormValidation
+    const { errors, result } = FormValidation(user);
+    if (result) {
+      setFormErrors(errors);
+      setErrorMsg("Fill all the manditory fields.");
+      return;
+    } else {
+      setFormErrors({
+        empid: false,
+        empname: false,
+        section: false,
+        password: false,
+        userrole: false,
+      });
+      setErrorMsg(null);
+    }
+
+    //User Add Model
     if (modelType.add) {
-      setRows((prevRows) => [
-        ...prevRows,
-        { ...user, id: prevRows.length + 1 },
-      ]);
+      dispatch(addUser({ ...user, id: rows.length + 1 }));
       setModelType({ add: false });
     }
+
+    //User Edit Model
     if (modelType.edit) {
       setRows((prev) => prev.map((u) => (u.id === user.id ? user : u)));
       setModelType({ edit: false });
     }
+
     setUser({
       empid: "",
       empname: "",
@@ -122,7 +179,7 @@ const AdminAddUser = () => {
             <BorderColorIcon
               onClick={() => {
                 setUser(params.row);
-                setModelType({ edit: true });
+                setModelType({ add: false, edit: true });
                 setModelOPen(true);
               }}
             />
@@ -148,7 +205,9 @@ const AdminAddUser = () => {
     []
   );
 
-  return (
+  return isLoading.status ? (
+    <CustomMuiLoader />
+  ) : (
     <div>
       {/* Add New user Button */}
       <div
@@ -163,7 +222,7 @@ const AdminAddUser = () => {
           variant="contained"
           onClick={() => {
             setModelOPen(true);
-            setModelType({ add: true });
+            setModelType({ add: true, edit: false });
           }}
         >
           Add New User
@@ -180,6 +239,8 @@ const AdminAddUser = () => {
         handleChange={handleChange}
         onClose={handleClose}
         onSubmit={handleSubmit}
+        error={formErrors}
+        errorMsg={errorMsg}
       />
 
       {/* Delete user model*/}

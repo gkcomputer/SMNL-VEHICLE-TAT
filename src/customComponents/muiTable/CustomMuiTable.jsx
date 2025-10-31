@@ -5,7 +5,6 @@ import Paper from "@mui/material/Paper";
 const paginationModel = { page: 0, pageSize: 10 };
 
 const CustomMuiTable = ({ rows, columns }) => {
-  console.log("abdul render");
   return (
     <DataGrid
       rows={rows}

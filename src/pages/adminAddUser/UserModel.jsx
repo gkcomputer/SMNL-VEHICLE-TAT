@@ -6,12 +6,13 @@ import CustomMuiButton from "../../customComponents/muiButton/CustomMuiButton";
 import CustomMuiTextField from "../../customComponents/muiTextField/CustomMuiTextField";
 
 const UserModel = ({
-  modelOpen,
   user,
-  handleChange,
   error,
   onClose,
+  errorMsg,
   onSubmit,
+  modelOpen,
+  handleChange,
 }) => {
   return (
     <CustomMuiModel open={modelOpen} onClose={onClose}>
@@ -25,7 +26,10 @@ const UserModel = ({
         }}
       >
         <div className="adduser-Model-header">
-          <CustomMuiTypoGraphy variant="h6">Add User</CustomMuiTypoGraphy>
+          <CustomMuiTypoGraphy variant="h4">Add User</CustomMuiTypoGraphy>
+        </div>
+        <div>
+          <CustomMuiTypoGraphy variant="h6">{errorMsg}</CustomMuiTypoGraphy>
         </div>
         <div className="adduser-Model-row1">
           <CustomMuiTextField
